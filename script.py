@@ -38,7 +38,7 @@ for i, column in enumerate(excel_data['Contato'].tolist()):
       saudacao = excel_data['Saudação'][i]
       adeus = excel_data['Adeus'][i]
 
-      # Faz o Corpo da Mensagem a ser Enviada
+      # Faz o Corpo da Mensagem
       texto = f'''
 {saudacao}, {nome}.%0A
 {adeus}, {nome}.
