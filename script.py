@@ -12,7 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
 # Recebendo Dados do Excel
-excel_data = pd.read_excel('Pagamento de quarto pro codigo.xlsx', sheet_name='Quartos')
+excel_data = pd.read_excel('Hoteis econo - msg automatizada.xlsx', sheet_name='errata')
 
 # Recebe Parâmetros pré armazenados, como o profile do wpp
 options = webdriver.ChromeOptions() # Incializa o Objeto de Options()
@@ -30,23 +30,22 @@ input("\nAperte ENTER para mandar as Mensagens.\n--> ")
 print("\nLOG das Mensagens:")
 
 # Passa por cada Linha do Excel com cada Informação
-for i, column in enumerate(excel_data['Nome Principal'].tolist()):
+for i, column in enumerate(excel_data['Hóspede 1'].tolist()):
    try:
       # Recebe Dados das Colunas do Excel e Separa em Variáveis para o Texto
-      contato = str(excel_data['Telefone Principal'][i]).replace('.0', '')
-      nome = excel_data['Nome Principal'][i]
-      valor = str(excel_data['Valor'][i])
+      nome = str(excel_data['Hóspede 1'][i])
+      contato = str(excel_data['Telefone 1'][i]).replace('.0', '').replace("(", "").replace(")", "").replace(" ", "").replace("+", "").replace("-", "")
+
 
       if len(contato) < 9:
          print(f"- Contato não encontrado de: {nome}")
-         continue
 
       # Faz o Corpo da Mensagem
       texto = f'''
-Olá {nome}, aqui é a Luisa Bragaia da atlética do Insper! Estou passando pra te lembrar que você reservou um quarto de hotel para 2 pessoas com a gente para o Economíadas 2022 em São Carlos! É necessário efetuar o pagamento do valor total do quarto, de R$ {valor},00, presencialmente no Insper até quarta feira (06/04) e me mandar nome, telefone e RG de cada hóspede do quarto.%0A%0A
-Caso já tenha efetuado o pagamento, peço desculpas! Vou precisar somente de um comprovante de pagamento e que você me confirme o nome, telefone e RG de cada hóspede do quarto.  %0A%0A
-Qualquer dúvida ou problema, pode me chamar!!
+*ERRATA*%0A
+O seu hotel possui café da manha *incluso*.
 '''
+
 
       # Cria a URL para o Contato
       url = 'https://web.whatsapp.com/send?phone=55' + contato + '&text=' + texto
