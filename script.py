@@ -12,7 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
 # Recebendo Dados do Excel
-excel_data = pd.read_excel('Hoteis econo - msg automatizada.xlsx', sheet_name='errata')
+excel_data = pd.read_excel('Onibus - Econo.xlsx', sheet_name='18h')
 
 # Recebe Parâmetros pré armazenados, como o profile do wpp
 options = webdriver.ChromeOptions() # Incializa o Objeto de Options()
@@ -30,11 +30,12 @@ input("\nAperte ENTER para mandar as Mensagens.\n--> ")
 print("\nLOG das Mensagens:")
 
 # Passa por cada Linha do Excel com cada Informação
-for i, column in enumerate(excel_data['Hóspede 1'].tolist()):
+for i, column in enumerate(excel_data['Nome'].tolist()):
    try:
       # Recebe Dados das Colunas do Excel e Separa em Variáveis para o Texto
-      nome = str(excel_data['Hóspede 1'][i])
-      contato = str(excel_data['Telefone 1'][i]).replace('.0', '').replace("(", "").replace(")", "").replace(" ", "").replace("+", "").replace("-", "")
+      nome = str(excel_data['Nome'][i])
+      contato = str(excel_data['Telefone'][i]).replace('.0', '').replace("(", "").replace(")", "").replace(" ", "").replace("+", "").replace("-", "")
+      horario = str(excel_data['HORIARIO'][i])
 
 
       if len(contato) < 9:
@@ -42,8 +43,8 @@ for i, column in enumerate(excel_data['Hóspede 1'].tolist()):
 
       # Faz o Corpo da Mensagem
       texto = f'''
-*ERRATA*%0A
-O seu hotel possui café da manha *incluso*.
+Tenha seu *documento em mãos* e compareça com *30 minutos* de antecedência%0A
+O seu *Busão* vai sair às *{horario}*.
 '''
 
 
