@@ -12,7 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
 # Recebendo Dados do Excel
-excel_data = pd.read_excel('./Precisam preencher o forms da carimbação.xlsx', sheet_name='Planilha1')
+excel_data = pd.read_excel('./Atletas Carimbados.xlsx', sheet_name='Planilha1')
 # print(excel_data)
 
 # Recebe Parâmetros pré armazenados, como o profile do wpp
@@ -21,7 +21,8 @@ options.add_argument(CHROME_PROFILE_PATH) # Insere o Chrome Profile
 options.add_experimental_option('excludeSwitches', ['enable-logging']) # Desabilita Logs
 
 # Seleciona o Driver do Chrome
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+# driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+driver = webdriver.Chrome(executable_path=ChromeDriverManager(version="114.0.5735.16").install(), options=options)
 
 # Entra no Whatsapp Web
 driver.get('https://web.whatsapp.com')
@@ -43,26 +44,26 @@ for i, column in enumerate(excel_data['Telefone'].tolist()):
 
       # Faz o Corpo da Mensagem
       texto = f'''
-Boa tarde, pessoal!%0A%0A
+Oie, td bem?%0A%0A
 
-Nós, da Atlética, precisamos muito da ajuda de vocês para organizarmos a inscrição de vocês no Economíadas. %0A%0A
+Nós da Atlética precisamos da sua ajuda! Até quarta feira, dia 16/08, respondam esse forms com sua matrícula atualizada de 23.2.%0A%0A
 
-O que precisam fazer?%0A
-Até essa sexta-feira 12h, dia 23/06, respondam esse forms com seu documento com foto (escaneado ou digital) e sua rede social!%0A%0A%0A
+Se você recebeu isso e não vai jogar, desconsidere, por favor!%0A%0A
+
+Se você já preencheu, obrigada!%0A%0A
+
+Como retirar a matrícula?%0A%0A 
+
+aluno on-line > secretaria virtual > solicitação de serviços > autoatendimento - declaração de matrícula > clicar em confirmar > descer a tela e clicar em confirmar solicitação > pdf%0A%0A
+
+Qualquer dúvida, entre em contato com:%0A%0A
+
+Beatriz Bozzo - 11 96442-1343%0A
+Julia Benatti - 11 98797-4030%0A
+Luana Vargas - 11 98570-9900%0A%0A%0A
 
 
-Quem pode fazer?%0A
-TODOS os atletas do time que estarão cursando regularmente o Insper no semestre que vem (2023.2)%0A%0A
-
-OBS: Atletas que se formaram agora em 2023.1, NÃO poderão jogar.%0A%0A
-
-Me inscrever nesse forms garante que eu estarei jogando no Econo?%0A
-Não! Isso sempre é critério da Comissão Técnica, mas é necessário que todos os atletas preencham o formulário de forma a garantir sua inscrição. Quem não responder até sexta-feira, não terá a possibilidade de jogar o Economíadas de 2023.%0A%0A
-
-Está em dúvida se vai ao jogos ou não?%0A
-Responda mesmo assim para garantir que caso você vá, você esteja liberado para jogar!%0A%0A
-
-https://forms.gle/FUVQTSMPkfpoidv3A
+https://docs.google.com/forms/d/e/1FAIpQLSfrcSaq80S_5_hi3kcM_mbrHhkvQyhvET11AKsHymXwhsu_QA/viewform
 '''
 
       # Cria a URL para o Contato
