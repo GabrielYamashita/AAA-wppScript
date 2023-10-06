@@ -12,7 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
 # Recebendo Dados do Excel
-excel_data = pd.read_excel('./Atletas Carimbados.xlsx', sheet_name='Planilha1')
+excel_data = pd.read_excel('./Vendas Onibus.xlsx', sheet_name='Onibus')
 # print(excel_data)
 
 # Recebe Parâmetros pré armazenados, como o profile do wpp
@@ -21,8 +21,8 @@ options.add_argument(CHROME_PROFILE_PATH) # Insere o Chrome Profile
 options.add_experimental_option('excludeSwitches', ['enable-logging']) # Desabilita Logs
 
 # Seleciona o Driver do Chrome
-# driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-driver = webdriver.Chrome(executable_path=ChromeDriverManager(version="114.0.5735.16").install(), options=options)
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+# driver = webdriver.Chrome(executable_path=ChromeDriverManager(version="114.0.5735.16").install(), options=options)
 
 # Entra no Whatsapp Web
 driver.get('https://web.whatsapp.com')
@@ -32,64 +32,59 @@ input("\nAperte ENTER para mandar as Mensagens.\n--> ")
 print("\nLOG das Mensagens:")
 
 # Passa por cada Linha do Excel com cada Informação
-for i, column in enumerate(excel_data['Telefone'].tolist()):
+for i, column in enumerate(excel_data['Telefone2'].tolist()):
    try:
       # Recebe Dados das Colunas do Excel e Separa em Variáveis para o Texto
-      nome = str(excel_data['Nome'][i])
-      contato = str(excel_data['Telefone'][i]).replace('.0', '').replace("(", "").replace(")", "").replace(" ", "").replace("+", "").replace("-", "").replace("+55", "")
-      # pago = str(excel_data['Pagou (sim/não)'][i]).lower().strip()
+      nome = str(excel_data['Nome2'][i])
+      contato = str(excel_data['Telefone2'][i]).replace('.0', '').replace("(", "").replace(")", "").replace(" ", "").replace("+", "").replace("-", "").replace("+55", "")
+      saida = str(excel_data['Saída'][i])
+
+      saida = 'h' in saida or '00' in saida
 
       if len(contato) < 9:
          erro = f"| (contato não encontrado)"
 
-      # Faz o Corpo da Mensagem
+            # Faz o Corpo da Mensagem
       texto = f'''
-Oie, td bem?%0A%0A
+Oi {nome} tudo bem?%0A
+Iniciamos a semana do economiadas!%0A
+Passando aqui para perguntar qual horário você gostaria de sair do insper?%0A
+16h,18h ou 19h?%0A%0A
 
-Nós da Atlética precisamos da sua ajuda! Até quarta feira, dia 16/08, respondam esse forms com sua matrícula atualizada de 23.2.%0A%0A
-
-Se você recebeu isso e não vai jogar, desconsidere, por favor!%0A%0A
-
-Se você já preencheu, obrigada!%0A%0A
-
-Como retirar a matrícula?%0A%0A 
-
-aluno on-line > secretaria virtual > solicitação de serviços > autoatendimento - declaração de matrícula > clicar em confirmar > descer a tela e clicar em confirmar solicitação > pdf%0A%0A
-
-Qualquer dúvida, entre em contato com:%0A%0A
-
-Beatriz Bozzo - 11 96442-1343%0A
-Julia Benatti - 11 98797-4030%0A
-Luana Vargas - 11 98570-9900%0A%0A%0A
-
-
-https://docs.google.com/forms/d/e/1FAIpQLSfrcSaq80S_5_hi3kcM_mbrHhkvQyhvET11AKsHymXwhsu_QA/viewform
+E sobre o horário de volta (São Carlos para São Paulo)? 14h, 16h, 17h ou 18h?%0A
+caso já tenha definido o seu horário, desconsidere essa mensagem
 '''
 
-      # Cria a URL para o Contato
+            # Cria a URL para o Contato
       url = 'https://web.whatsapp.com/send?phone=55' + contato + '&text=' + texto
 
       # Entra no Link de Contato do Whatsapp
       driver.get(url)
-      if len(contato) >= 9:
-         try:
-            # Espera 35s ou até se tornar Clicável
-            click_btn = WebDriverWait(driver, 35).until(EC.element_to_be_clickable((By.CLASS_NAME, '_3XKXx')))
+      if not saida:
+         if len(contato) >= 9:
+            try:
+               # Espera 35s ou até se tornar Clicável
+               click_btn = WebDriverWait(driver, 35).until(EC.element_to_be_clickable((By.CLASS_NAME, '_3XKXx')))
 
-         except Exception as e:
-            # Retorna Erro caso a mensagem não tenha sido enviada
-            print(f"{i+1}) Desculpe, mensagem não enviada para {nome}")
+            except Exception as e:
+               # Retorna Erro caso a mensagem não tenha sido enviada
+               print(f"{i+1}) Desculpe, mensagem não enviada para {nome}")
+
+            else:
+               time.sleep(3) # Tempo para Carregar Página
+               click_btn.click() # Aperta o Botão de Enviar
+               time.sleep(2) # Tempo para Mandar Mensagem
+
+               # Retorna Mensagem de Sucesso para a Pessoa
+               print(f"{i+1}) Mensagem enviada para: {nome} | ({contato})")
 
          else:
-            time.sleep(3) # Tempo para Carregar Página
-            click_btn.click() # Aperta o Botão de Enviar
-            time.sleep(2) # Tempo para Mandar Mensagem
-
-            # Retorna Mensagem de Sucesso para a Pessoa
-            print(f"{i+1}) Mensagem enviada para: {nome} | ({contato})")
+            print(f"{i+1}) Desculpe, mensagem não enviada para {nome} {erro}")
 
       else:
-         print(f"{i+1}) Desculpe, mensagem não enviada para {nome} {erro}")
+            print("Já possui Horário Alocado")
+            continue
+
 
    except Exception as e:
       # Retorna Mensagem de Erro 

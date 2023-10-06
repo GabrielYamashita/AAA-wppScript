@@ -1,4 +1,8 @@
 
-s = "Daniel Leite Sampaio da Costa Neves           "
+saida = '18s'
 
-print(len(s))
+saida = 'h' in saida or '00' in saida
+
+
+if not saida:
+    print(saida)
